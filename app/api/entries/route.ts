@@ -26,9 +26,31 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { website, cookies, username, password } = body;
 
-    if (!website || !cookies || !Array.isArray(cookies) || cookies.length === 0) {
+    // Validate website is provided
+    if (!website || !website.trim()) {
       return NextResponse.json(
-        { error: 'Website and cookies are required' },
+        { error: 'Website name is required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate cookies array format if provided
+    if (cookies !== undefined && (!Array.isArray(cookies))) {
+      return NextResponse.json(
+        { error: 'Cookies must be an array' },
+        { status: 400 }
+      );
+    }
+
+    // Validate that either cookies or credentials are provided
+    const hasCookies = Array.isArray(cookies) && cookies.length > 0;
+    const hasUsername = username && username.trim();
+    const hasPassword = password && password.trim();
+    const hasCredentials = hasUsername || hasPassword;
+
+    if (!hasCookies && !hasCredentials) {
+      return NextResponse.json(
+        { error: 'Either cookies or username/password is required' },
         { status: 400 }
       );
     }
@@ -36,7 +58,7 @@ export async function POST(request: NextRequest) {
     const newEntry: Entry = {
       id: Date.now(),
       website: website.trim(),
-      cookies: cookies as Cookie[],
+      cookies: (cookies as Cookie[]) || [],
       username: username?.trim() || undefined,
       password: password?.trim() || undefined,
       createdAt: Date.now(),
