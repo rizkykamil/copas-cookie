@@ -52,19 +52,35 @@ export const PRESETS: Record<string, Preset> = {
       {
         name: 'SESSDATA',
         domain: '',
-        httpOnly: false,
-        secure: false,
+        httpOnly: true,
+        secure: true,
         sameSite: undefined,
-        prioritas: undefined,
+        prioritas: 'medium',
       },
     ],
   },
 
   chatgpt : {
-    type: 'simple',
+    type: 'full',
     name: 'ChatGPT',
-    cookies: ['__Secure-next-auth.session-token', '__Host-next-auth.csrf-token'],
-
+    cookies: [
+      {
+        name: '__Secure-next-auth.session-token',
+        domain: '',
+        httpOnly: true,
+        secure: true,
+        sameSite: undefined,
+        prioritas: 'medium',
+      },
+      {
+        name: '__Host-next-auth.csrf-token',
+        domain: '',
+        httpOnly: true,
+        secure: true,
+        sameSite: undefined,
+        prioritas: 'medium',
+      },
+    ],
   },
 };
 
