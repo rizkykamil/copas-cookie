@@ -74,10 +74,10 @@ export default function FAQModal({ isOpen, onClose }: FAQModalProps) {
               <div>
                 <h3 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
                   <Search className="w-5 h-5 text-purple-400" />
-                  Cara Mencari Cookie di Browser
+                  Cara Menggunakan Credentials (Email & Password)
                 </h3>
                 <p className="text-slate-300 text-sm leading-relaxed">
-                  Tutorial ini akan membantu Anda menemukan cookie yang dibutuhkan dari browser.
+                  Tutorial ini akan membantu Anda menggunakan email dan password yang di-share dari aplikasi ini untuk login ke website tujuan.
                 </p>
               </div>
 
@@ -85,26 +85,28 @@ export default function FAQModal({ isOpen, onClose }: FAQModalProps) {
                 <h4 className="text-sm font-semibold text-brand-300">Langkah-langkah:</h4>
                 <ol className="list-decimal list-inside space-y-3 text-sm text-slate-300">
                   <li>
-                    <span className="font-medium text-white">Buka Developer Tools</span>
+                    <span className="font-medium text-white">Ke Website</span>
                     <ul className="list-disc list-inside ml-6 mt-1 space-y-1 text-slate-400">
-                      <li>Klik kanan pada halaman website yang ingin Anda ambil cookienya</li>
-                      <li>Pilih <span className="text-yellow-400">"Inspect"</span> atau <span className="text-yellow-400">"Periksa"</span></li>
-                      <li>Atau tekan tombol <span className="text-yellow-400 font-mono">F12</span> pada keyboard</li>
+                      <li>Buka website atau aplikasi tujuan di browser Anda</li>
+                      <li>Pastikan Anda berada di halaman utama website tersebut</li>
                     </ul>
                   </li>
                   <li>
-                    <span className="font-medium text-white">Akses Tab Application</span>
+                    <span className="font-medium text-white">Click Login</span>
                     <ul className="list-disc list-inside ml-6 mt-1 space-y-1 text-slate-400">
-                      <li>Di Developer Tools, cari dan klik tab <span className="text-yellow-400">"Application"</span> atau <span className="text-yellow-400">"Aplikasi"</span></li>
-                      <li>Di panel kiri, cari dan klik <span className="text-yellow-400">"Cookies"</span></li>
-                      <li>Pilih domain website yang sesuai</li>
+                      <li>Cari dan klik tombol <span className="text-yellow-400">"Login"</span> atau <span className="text-yellow-400">"Sign In"</span></li>
+                      <li>Anda akan diarahkan ke halaman login</li>
                     </ul>
                   </li>
                   <li>
-                    <span className="font-medium text-white">Gunakan Filter</span>
+                    <span className="font-medium text-white">Paste Sesuai dengan Valuenya</span>
                     <ul className="list-disc list-inside ml-6 mt-1 space-y-1 text-slate-400">
-                      <li>Gunakan kolom filter/search untuk mencari nama cookie yang Anda butuhkan</li>
-                      <li>Nama cookie biasanya terlihat jelas di kolom <span className="text-yellow-400">"Name"</span></li>
+                      <li>Di halaman login, cari field <span className="text-yellow-400">"Email"</span> atau <span className="text-yellow-400">"Username"</span></li>
+                      <li>Copy email/username dari aplikasi ini (dari entry yang di-share admin)</li>
+                      <li>Paste email/username tersebut ke field email di website tujuan</li>
+                      <li>Copy password dari aplikasi ini</li>
+                      <li>Paste password tersebut ke field password di website tujuan</li>
+                      <li>Klik tombol <span className="text-yellow-400">"Login"</span> atau <span className="text-yellow-400">"Sign In"</span> untuk masuk</li>
                     </ul>
                   </li>
                 </ol>
@@ -112,8 +114,20 @@ export default function FAQModal({ isOpen, onClose }: FAQModalProps) {
 
               <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-4">
                 <p className="text-xs text-blue-300">
-                  <strong className="text-blue-200">Tips:</strong> Jika Anda tidak melihat tab "Application", coba cari tab "Storage" atau "Penyimpanan" di beberapa browser.
+                  <strong className="text-blue-200">Tips:</strong> Pastikan Anda menyalin email dan password dengan benar. Satu karakter yang salah bisa membuat login gagal.
                 </p>
+              </div>
+
+              <div className="bg-dark-900 border border-slate-700 rounded-lg p-4">
+                <h4 className="text-sm font-semibold text-brand-300 mb-2">Contoh:</h4>
+                <div className="text-xs text-slate-400 font-mono bg-dark-800 p-3 rounded border border-slate-700 space-y-1">
+                  <div>Dari aplikasi ini:</div>
+                  <div className="ml-4">Email: <span className="text-white">user@example.com</span></div>
+                  <div className="ml-4">Password: <span className="text-white">********</span></div>
+                  <div className="mt-2 text-green-400">↓ Paste ke website tujuan ↓</div>
+                  <div className="mt-2">Field Email: <span className="text-white">user@example.com</span></div>
+                  <div>Field Password: <span className="text-white">********</span></div>
+                </div>
               </div>
             </div>
           )}
