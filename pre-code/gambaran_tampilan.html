@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Manager - Secure Copy Paste</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Icons (Lucide) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 500: '#3b82f6', 600: '#2563eb' },
+                        dark: { 800: '#1e293b', 900: '#0f172a' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark-900 text-slate-200 min-h-screen flex flex-col items-center p-4">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
+
+    <!-- Main Container -->
+    <div class="w-full max-w-5xl">
+        
+        <!-- Header -->
+        <header class="mb-8 text-center pt-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2 flex justify-center items-center gap-2">
+                <i data-lucide="cookie" class="text-yellow-500 w-8 h-8"></i>
+                Cookie Manager
+            </h1>
+            <p class="text-slate-400 text-sm md:text-base">Secure Cookie Storage & Sharing System (1-Hour Auto Delete)</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="flex justify-center mb-8">
+            <div class="bg-dark-800 p-1 rounded-lg inline-flex shadow-lg border border-slate-700">
+                <button onclick="switchTab('admin')" id="tab-btn-admin" class="px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 bg-brand-600 text-white shadow-sm">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i> Admin Panel
+                </button>
+                <button onclick="switchTab('user')" id="tab-btn-user" class="px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 text-slate-400 hover:text-white">
+                    <i data-lucide="users" class="w-4 h-4"></i> Public User
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= ADMIN VIEW ================= -->
+        <div id="admin-view" class="fade-in">
+            
+            <!-- Admin Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-dark-800 border border-slate-700 p-4 rounded-xl shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-slate-400 text-xs uppercase tracking-wider font-semibold">Active Entries</p>
+                        <h3 class="text-2xl font-bold text-white mt-1" id="stat-active-entries">0</h3>
+                    </div>
+                    <div class="bg-blue-500/10 p-3 rounded-lg text-blue-400">
+                        <i data-lucide="activity" class="w-6 h-6"></i>
+                    </div>
+                </div>
+                <div class="bg-dark-800 border border-slate-700 p-4 rounded-xl shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-slate-400 text-xs uppercase tracking-wider font-semibold">Total Cookies</p>
+                        <h3 class="text-2xl font-bold text-white mt-1" id="stat-total-cookies">0</h3>
+                    </div>
+                    <div class="bg-purple-500/10 p-3 rounded-lg text-purple-400">
+                        <i data-lucide="database" class="w-6 h-6"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create New Entry Form -->
+            <div class="bg-dark-800 border border-slate-700 rounded-xl p-6 mb-8 shadow-lg">
+                <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i data-lucide="plus-circle" class="w-5 h-5 text-green-400"></i> Add New Entry
+                    </h2>
+                    <span class="text-xs bg-slate-700 text-slate-300 px-2 py-1 rounded">Auto-delete in 1h</span>
+                </div>
+
+                <!-- Presets -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-slate-400 mb-2">Quick Presets</label>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="applyPreset('netflix')" class="flex items-center gap-2 px-3 py-1.5 bg-red-900/30 border border-red-800 text-red-400 rounded hover:bg-red-900/50 transition-colors text-sm">
+                            <i data-lucide="film" class="w-3 h-3"></i> Netflix
+                        </button>
+                        <button onclick="applyPreset('instagram')" class="flex items-center gap-2 px-3 py-1.5 bg-pink-900/30 border border-pink-800 text-pink-400 rounded hover:bg-pink-900/50 transition-colors text-sm">
+                            <i data-lucide="camera" class="w-3 h-3"></i> Instagram
+                        </button>
+                        <button onclick="applyPreset('youtube')" class="flex items-center gap-2 px-3 py-1.5 bg-red-900/30 border border-red-700 text-red-300 rounded hover:bg-red-900/50 transition-colors text-sm">
+                            <i data-lucide="play-circle" class="w-3 h-3"></i> YouTube
+                        </button>
+                        <button onclick="applyPreset('tiktok')" class="flex items-center gap-2 px-3 py-1.5 bg-cyan-900/30 border border-cyan-800 text-cyan-400 rounded hover:bg-cyan-900/50 transition-colors text-sm">
+                            <i data-lucide="music-2" class="w-3 h-3"></i> TikTok
+                        </button>
+                        <button onclick="resetForm()" class="flex items-center gap-2 px-3 py-1.5 bg-slate-700 border border-slate-600 text-slate-300 rounded hover:bg-slate-600 transition-colors text-sm ml-auto">
+                            <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Website Name -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-slate-300 mb-1">Website Name</label>
+                    <input type="text" id="website-name" placeholder="e.g. Netflix Premium" class="w-full bg-dark-900 border border-slate-600 rounded-lg p-2.5 text-white placeholder-slate-500 focus:ring-2 focus:ring-brand-600 focus:border-transparent outline-none transition-all">
+                </div>
+
+                <!-- Dynamic Cookie Fields -->
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-sm font-medium text-slate-300">Cookie Values</label>
+                        <button onclick="addCookieField()" class="text-xs text-brand-500 hover:text-brand-400 font-medium flex items-center gap-1">
+                            <i data-lucide="plus" class="w-3 h-3"></i> Add Field
+                        </button>
+                    </div>
+                    <div id="cookie-fields-container" class="space-y-3">
+                        <!-- Fields injected via JS -->
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button onclick="saveEntry()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition-all flex justify-center items-center gap-2">
+                    <i data-lucide="save" class="w-5 h-5"></i> Publish Entry
+                </button>
+            </div>
+
+            <!-- Admin Entry List -->
+            <h3 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <i data-lucide="list" class="w-5 h-5 text-slate-400"></i> Active Database
+            </h3>
+            <div id="admin-entry-list" class="grid grid-cols-1 gap-4">
+                <!-- Entries injected via JS -->
+                <div class="text-center p-8 text-slate-500 border border-dashed border-slate-700 rounded-xl">
+                    No active entries found. Create one above.
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= USER VIEW ================= -->
+        <div id="user-view" class="hidden fade-in">
+            
+            <div class="bg-blue-900/20 border border-blue-800 rounded-lg p-4 mb-6 flex items-start gap-3">
+                <i data-lucide="info" class="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0"></i>
+                <div class="text-sm text-blue-200">
+                    <p class="font-semibold mb-1">Information for Users</p>
+                    <p>Cookies listed here are shared by the admin. Click the <strong>Copy</strong> button to use them. For security, all entries will automatically disappear 1 hour after creation.</p>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-end mb-4">
+                <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i data-lucide="globe" class="w-6 h-6 text-brand-500"></i> Available Cookies
+                </h3>
+                <span class="text-sm text-slate-400" id="user-entry-count">0 items found</span>
+            </div>
+
+            <!-- Search (Optional Enhancement) -->
+            <div class="relative mb-6">
+                <input type="text" id="user-search" oninput="renderUserEntries()" placeholder="Search website..." class="w-full bg-dark-800 border border-slate-700 rounded-lg py-2.5 pl-10 pr-4 text-white focus:outline-none focus:border-brand-600">
+                <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-slate-500"></i>
+            </div>
+
+            <div id="user-entry-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- User Entries injected via JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- DATA & STATE ---
+        const DB_KEY = 'cookieManagerDB';
+        const ONE_HOUR_MS = 3600000; // 1 Hour
+        let currentTab = 'admin';
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            loadDataAndRender();
+            // Start Timer Loop (Every 1 second)
+            setInterval(checkExpiryAndRenderTimer, 1000);
+            
+            // Add initial empty cookie field
+            addCookieField();
+        });
+
+        // --- MODEL FUNCTIONS ---
+        function getEntries() {
+            const data = localStorage.getItem(DB_KEY);
+            return data ? JSON.parse(data).entries : [];
+        }
+
+        function saveEntries(entries) {
+            localStorage.setItem(DB_KEY, JSON.stringify({ entries }));
+            updateStats();
+        }
+
+        function addEntry(website, cookies) {
+            const entries = getEntries();
+            const newEntry = {
+                id: Date.now(), // timestamp as ID
+                website: website,
+                cookies: cookies, // Array of {name, value}
+                createdAt: Date.now()
+            };
+            entries.unshift(newEntry); // Add to top
+            saveEntries(entries);
+            
+            if(currentTab === 'admin') renderAdminEntries();
+            else renderUserEntries();
+            
+            showToast('Success', 'Entry added successfully!', 'success');
+        }
+
+        function deleteEntry(id) {
+            let entries = getEntries();
+            entries = entries.filter(e => e.id !== id);
+            saveEntries(entries);
+            renderAdminEntries(); // Only admin can delete manually
+            showToast('Deleted', 'Entry removed.', 'info');
+        }
+
+        // --- LOGIC: AUTO DELETE ---
+        function checkExpiryAndRenderTimer() {
+            let entries = getEntries();
+            const now = Date.now();
+            let hasChanges = false;
+
+            // Filter out expired entries
+            const activeEntries = entries.filter(e => {
+                const isExpired = (now - e.createdAt) > ONE_HOUR_MS;
+                if (isExpired) hasChanges = true;
+                return !isExpired;
+            });
+
+            if (hasChanges) {
+                saveEntries(activeEntries);
+                // Re-render lists completely if something was deleted
+                if (currentTab === 'admin') renderAdminEntries();
+                else renderUserEntries();
+            } else {
+                // Just update timer text in UI without re-rendering DOM
+                updateTimerDisplays(activeEntries);
+            }
+        }
+
+        function updateTimerDisplays(entries) {
+            entries.forEach(entry => {
+                const timeRemaining = ONE_HOUR_MS - (Date.now() - entry.createdAt);
+                const timerEl = document.getElementById(`timer-${entry.id}`);
+                const progressBar = document.getElementById(`progress-${entry.id}`);
+                
+                if (timerEl) {
+                    const { text, isUrgent } = formatTime(timeRemaining);
+                    timerEl.innerText = text;
+                    if (isUrgent) {
+                        timerEl.classList.add('text-red-400');
+                        timerEl.classList.remove('text-yellow-400', 'text-green-400');
+                    }
+                }
+                
+                if (progressBar) {
+                    const pct = (timeRemaining / ONE_HOUR_MS) * 100;
+                    progressBar.style.width = `${pct}%`;
+                    if(pct < 10) progressBar.classList.add('bg-red-500');
+                    else progressBar.classList.remove('bg-red-500');
+                }
+            });
+        }
+
+        function formatTime(ms) {
+            if (ms < 0) return { text: "00m 00s", isUrgent: true };
+            const totalSeconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            const text = `${minutes}m ${seconds.toString().padStart(2, '0')}s`;
+            return { text, isUrgent: minutes < 5 };
+        }
+
+        // --- VIEW: TABS & RENDER ---
+        function switchTab(tab) {
+            currentTab = tab;
+            const adminView = document.getElementById('admin-view');
+            const userView = document.getElementById('user-view');
+            const btnAdmin = document.getElementById('tab-btn-admin');
+            const btnUser = document.getElementById('tab-btn-user');
+
+            if (tab === 'admin') {
+                adminView.classList.remove('hidden');
+                userView.classList.add('hidden');
+                
+                // Style Active
+                btnAdmin.className = "px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 bg-brand-600 text-white shadow-sm";
+                btnUser.className = "px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 text-slate-400 hover:text-white";
+                
+                renderAdminEntries();
+            } else {
+                adminView.classList.add('hidden');
+                userView.classList.remove('hidden');
+
+                // Style Active
+                btnUser.className = "px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 bg-brand-600 text-white shadow-sm";
+                btnAdmin.className = "px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 text-slate-400 hover:text-white";
+
+                renderUserEntries();
+            }
+            updateStats();
+        }
+
+        function loadDataAndRender() {
+            updateStats();
+            renderAdminEntries();
+        }
+
+        function updateStats() {
+            const entries = getEntries();
+            let totalCookies = 0;
+            entries.forEach(e => totalCookies += e.cookies.length);
+
+            document.getElementById('stat-active-entries').innerText = entries.length;
+            document.getElementById('stat-total-cookies').innerText = totalCookies;
+            document.getElementById('user-entry-count').innerText = `${entries.length} items available`;
+        }
+
+        // --- VIEW: ADMIN ---
+        function applyPreset(type) {
+            const presets = {
+                netflix: { name: 'Netflix', cookies: ['SecureNetflixId', 'NetflixId', 'authUser', 'flwssb'] },
+                instagram: { name: 'Instagram', cookies: ['sessionid', 'csrftoken', 'ig_did', 'ig_nrcb'] },
+                youtube: { name: 'YouTube', cookies: ['HSID', 'SSID', 'APISID', 'LOGIN_INFO'] },
+                tiktok: { name: 'TikTok', cookies: ['sessionid', 'tt_webid', 'ttwid', 'odin_tt'] }
+            };
+
+            const data = presets[type];
+            if (!data) return;
+
+            document.getElementById('website-name').value = data.name;
+            
+            const container = document.getElementById('cookie-fields-container');
+            container.innerHTML = ''; // clear existing
+            
+            data.cookies.forEach(cookieName => {
+                addCookieField(cookieName);
+            });
+            showToast('Preset Loaded', `${data.name} template applied.`, 'info');
+        }
+
+        function resetForm() {
+            document.getElementById('website-name').value = '';
+            document.getElementById('cookie-fields-container').innerHTML = '';
+            addCookieField();
+        }
+
+        function addCookieField(prefillName = '') {
+            const container = document.getElementById('cookie-fields-container');
+            const div = document.createElement('div');
+            div.className = "flex gap-2 items-start animate-[fadeIn_0.2s_ease-out]";
+            div.innerHTML = `
+                <div class="flex-1">
+                    <input type="text" value="${prefillName}" placeholder="Cookie Name" class="cookie-name w-full bg-dark-900 border border-slate-600 rounded-md p-2 text-xs text-brand-300 placeholder-slate-600 mb-1 focus:border-brand-500 outline-none">
+                    <textarea placeholder="Paste Cookie Value here..." class="cookie-value w-full bg-dark-900 border border-slate-600 rounded-md p-2 text-xs text-white placeholder-slate-600 h-16 resize-none focus:border-brand-500 outline-none"></textarea>
+                </div>
+                <button onclick="this.parentElement.remove()" class="mt-1 p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-900/20 rounded transition-colors" title="Remove field">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+            `;
+            container.appendChild(div);
+            lucide.createIcons();
+        }
+
+        function saveEntry() {
+            const websiteName = document.getElementById('website-name').value.trim();
+            if (!websiteName) return showToast('Error', 'Website Name is required', 'error');
+
+            const cookieInputs = document.querySelectorAll('#cookie-fields-container > div');
+            const cookies = [];
+            
+            cookieInputs.forEach(div => {
+                const name = div.querySelector('.cookie-name').value.trim();
+                const value = div.querySelector('.cookie-value').value.trim();
+                if (name && value) {
+                    cookies.push({ name, value });
+                }
+            });
+
+            if (cookies.length === 0) return showToast('Error', 'At least one valid cookie (name & value) is required', 'error');
+
+            addEntry(websiteName, cookies);
+            resetForm();
+        }
+
+        function renderAdminEntries() {
+            const list = document.getElementById('admin-entry-list');
+            const entries = getEntries();
+            
+            if (entries.length === 0) {
+                list.innerHTML = `<div class="text-center p-8 text-slate-500 border border-dashed border-slate-700 rounded-xl">No active entries found.</div>`;
+                return;
+            }
+
+            let html = '';
+            entries.forEach(entry => {
+                const timeRemaining = ONE_HOUR_MS - (Date.now() - entry.createdAt);
+                const { text, isUrgent } = formatTime(timeRemaining);
+                const timerColor = isUrgent ? 'text-red-400' : 'text-yellow-400';
+                const progressPct = (timeRemaining / ONE_HOUR_MS) * 100;
+
+                html += `
+                <div class="bg-dark-800 border border-slate-700 rounded-xl overflow-hidden shadow-sm relative group">
+                    <!-- Progress Bar -->
+                    <div class="h-1 w-full bg-slate-700 absolute top-0 left-0">
+                        <div id="progress-${entry.id}" class="h-full bg-brand-500 transition-all duration-1000" style="width: ${progressPct}%"></div>
+                    </div>
+                    
+                    <div class="p-4 pt-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <h4 class="font-bold text-lg text-white">${entry.website}</h4>
+                                <span class="text-xs text-slate-400 flex items-center gap-1 mt-1 font-mono ${timerColor}">
+                                    <i data-lucide="clock" class="w-3 h-3"></i> <span id="timer-${entry.id}">${text}</span> remaining
+                                </span>
+                            </div>
+                            <button onclick="deleteEntry(${entry.id})" class="p-2 text-slate-400 hover:text-red-400 hover:bg-red-900/20 rounded transition-colors">
+                                <i data-lucide="trash" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-2 max-h-40 overflow-y-auto pr-1">
+                            ${entry.cookies.map(c => `
+                                <div class="bg-dark-900 p-2 rounded border border-slate-700 flex justify-between items-center group/cookie">
+                                    <div class="overflow-hidden mr-2">
+                                        <div class="text-xs text-brand-400 font-semibold truncate">${c.name}</div>
+                                        <div class="text-[10px] text-slate-500 truncate font-mono">value hidden</div>
+                                    </div>
+                                    <button onclick="copyToClipboard('${c.value}')" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1 rounded border border-slate-600 transition-colors flex items-center gap-1">
+                                        <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>`;
+            });
+            list.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        // --- VIEW: USER ---
+        function renderUserEntries() {
+            const list = document.getElementById('user-entry-list');
+            const search = document.getElementById('user-search').value.toLowerCase();
+            let entries = getEntries();
+            
+            // Filter
+            if (search) {
+                entries = entries.filter(e => e.website.toLowerCase().includes(search));
+            }
+
+            if (entries.length === 0) {
+                list.innerHTML = `<div class="col-span-full text-center p-8 text-slate-500">No cookies available currently.</div>`;
+                return;
+            }
+
+            let html = '';
+            entries.forEach(entry => {
+                const timeRemaining = ONE_HOUR_MS - (Date.now() - entry.createdAt);
+                const { text, isUrgent } = formatTime(timeRemaining);
+                const timerColor = isUrgent ? 'text-red-400' : 'text-green-400';
+
+                html += `
+                <div class="bg-dark-800 border border-slate-700 rounded-xl p-4 shadow-sm hover:border-brand-500/50 transition-colors">
+                    <div class="flex justify-between items-center mb-3">
+                        <h4 class="font-bold text-lg text-white">${entry.website}</h4>
+                        <span class="text-xs bg-dark-900 px-2 py-1 rounded border border-slate-700 font-mono ${timerColor} flex items-center gap-1">
+                            <i data-lucide="timer" class="w-3 h-3"></i>
+                            <span id="timer-${entry.id}">${text}</span>
+                        </span>
+                    </div>
+
+                    <div class="space-y-2">
+                         ${entry.cookies.map(c => `
+                            <div class="bg-dark-900 p-2.5 rounded border border-slate-700 flex justify-between items-center">
+                                <div class="text-xs font-medium text-slate-300 truncate w-1/2">${c.name}</div>
+                                <button onclick="copyToClipboard('${c.value}')" class="text-xs bg-brand-600/10 hover:bg-brand-600/30 text-brand-400 hover:text-brand-300 border border-brand-600/30 px-3 py-1.5 rounded transition-all flex items-center gap-1 font-semibold">
+                                    <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+            list.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        // --- UTILS ---
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied!', 'Cookie value copied to clipboard.', 'success');
+            }).catch(err => {
+                showToast('Error', 'Failed to copy', 'error');
+            });
+        }
+
+        function showToast(title, message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            // Colors
+            let colors = "bg-dark-800 border-l-4 border-slate-500";
+            let icon = "info";
+            if(type === 'success') { colors = "bg-dark-800 border-l-4 border-green-500"; icon = "check-circle"; }
+            if(type === 'error') { colors = "bg-dark-800 border-l-4 border-red-500"; icon = "alert-circle"; }
+            if(type === 'info') { colors = "bg-dark-800 border-l-4 border-blue-500"; icon = "info"; }
+
+            toast.className = `${colors} text-white p-4 rounded shadow-2xl flex items-start gap-3 min-w-[300px] animate-[slideIn_0.3s_ease-out]`;
+            toast.innerHTML = `
+                <i data-lucide="${icon}" class="w-5 h-5 mt-0.5"></i>
+                <div>
+                    <h4 class="font-bold text-sm">${title}</h4>
+                    <p class="text-xs text-slate-400 mt-0.5">${message}</p>
+                </div>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease-in';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
