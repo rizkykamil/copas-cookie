@@ -194,92 +194,104 @@ export default function FAQModal({ isOpen, onClose }: FAQModalProps) {
             </div>
           )}
 
-          {activeTab === 'full' && (
-            <div className="space-y-4">
-              <div>
-                <h3 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
-                  <RefreshCw className="w-5 h-5 text-blue-400" />
-                  Menyelesaikan & Refresh
-                </h3>
-                <p className="text-slate-300 text-sm leading-relaxed">
-                  Setelah semua cookie berhasil di-paste, ikuti langkah terakhir untuk menyelesaikan proses.
-                </p>
-              </div>
+{activeTab === 'full' && (
+  <div className="space-y-4">
+    <div>
+      <h3 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
+        <RefreshCw className="w-5 h-5 text-blue-400" />
+        Langkah Terakhir
+      </h3>
+      <p className="text-slate-300 text-sm leading-relaxed">
+        Setelah selesai copy-paste semua cookie, ikuti 3 langkah mudah ini untuk menyelesaikan prosesnya.
+      </p>
+    </div>
 
-              <div className="bg-dark-900 border border-slate-700 rounded-lg p-4 space-y-3">
-                <h4 className="text-sm font-semibold text-brand-300">Langkah-langkah:</h4>
-                <ol className="list-decimal list-inside space-y-3 text-sm text-slate-300">
-                  <li>
-                    <span className="font-medium text-white">Verifikasi Semua Cookie</span>
-                    <ul className="list-disc list-inside ml-6 mt-1 space-y-1 text-slate-400">
-                      <li>Pastikan semua cookie yang diperlukan sudah di-paste dengan benar</li>
-                      <li>Periksa kembali nama cookie (Name) dan nilai cookie (Value) sudah sesuai</li>
-                      <li>Jika ada cookie yang memiliki domain, httpOnly, secure, atau sameSite, pastikan setting-nya juga sesuai</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <span className="font-medium text-white">Tutup Developer Tools</span>
-                    <ul className="list-disc list-inside ml-6 mt-1 space-y-1 text-slate-400">
-                      <li>Setelah semua cookie selesai di-paste, tutup Developer Tools</li>
-                      <li>Anda bisa menutup dengan menekan <span className="text-yellow-400 font-mono">F12</span> lagi atau klik tombol X</li>
-                    </ul>
-                  </li>
-                  <li>
-                    <span className="font-medium text-white">Refresh Halaman</span>
-                    <ul className="list-disc list-inside ml-6 mt-1 space-y-1 text-slate-400">
-                      <li>Refresh halaman aplikasi tujuan untuk menerapkan cookie yang baru</li>
-                      <li>Tekan <span className="text-yellow-400 font-mono">F5</span> atau <span className="text-yellow-400 font-mono">Ctrl+R</span> untuk refresh</li>
-                      <li>Atau klik tombol refresh di browser</li>
-                      <li>Setelah refresh, cookie seharusnya sudah aktif dan Anda bisa menggunakan aplikasi</li>
-                    </ul>
-                  </li>
-                </ol>
-              </div>
+    <div className="bg-dark-900 border border-slate-700 rounded-lg p-4 space-y-4">
+      <h4 className="text-sm font-semibold text-brand-300">3 Langkah Mudah:</h4>
+      
+      <div className="space-y-4">
+        {/* Langkah 1 */}
+        <div className="flex gap-3">
+          <span className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm font-bold shrink-0">1</span>
+          <div>
+            <p className="font-medium text-white mb-2">Cek Sekali Lagi</p>
+            <p className="text-sm text-slate-300">
+              Pastikan semua cookie sudah berhasil di-copy paste. Lihat apakah nama dan nilainya sudah benar semua.
+            </p>
+          </div>
+        </div>
 
-              <div className="bg-green-900/20 border border-green-800 rounded-lg p-4">
-                <p className="text-xs text-green-300">
-                  <strong className="text-green-200">Tips:</strong> Jika setelah refresh cookie masih belum bekerja, coba:
-                </p>
-                <ul className="list-disc list-inside ml-4 mt-1 space-y-1 text-xs text-green-300">
-                  <li>Clear cache browser dan refresh lagi</li>
-                  <li>Periksa kembali apakah semua cookie sudah di-paste dengan benar</li>
-                  <li>Pastikan domain cookie sesuai dengan domain aplikasi tujuan</li>
-                </ul>
-              </div>
+        {/* Langkah 2 */}
+        <div className="flex gap-3">
+          <span className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm font-bold shrink-0">2</span>
+          <div>
+            <p className="font-medium text-white mb-2">Tutup Jendela Inspect</p>
+            <p className="text-sm text-slate-300">
+              Tutup jendela inspect yang tadi dibuka. Caranya tekan tombol <span className="px-2 py-1 bg-yellow-900/30 text-yellow-400 font-mono rounded">F12</span> atau klik tombol X di pojok jendela.
+            </p>
+          </div>
+        </div>
 
-              <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-4">
-                <p className="text-xs text-blue-300">
-                  <strong className="text-blue-200">Peringatan:</strong> Cookie yang di-share di aplikasi ini akan otomatis terhapus setelah 1 jam. Pastikan Anda sudah menyelesaikan proses copy-paste sebelum cookie expired.
-                </p>
-              </div>
+        {/* Langkah 3 */}
+        <div className="flex gap-3">
+          <span className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm font-bold shrink-0">3</span>
+          <div>
+            <p className="font-medium text-white mb-2">Muat Ulang Halaman</p>
+            <p className="text-sm text-slate-300 mb-2">
+              Muat ulang/refresh halaman website-nya. Ada 3 cara:
+            </p>
+            <ul className="list-disc list-inside ml-4 space-y-1 text-sm text-slate-400">
+              <li>Tekan tombol <span className="text-yellow-400 font-mono">F5</span></li>
+              <li>Tekan <span className="text-yellow-400 font-mono">Ctrl+R</span> (Windows) atau <span className="text-yellow-400 font-mono">Cmd+R</span> (Mac)</li>
+              <li>Klik tombol refresh ↻ di browser</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
 
-              <div className="bg-dark-900 border border-slate-700 rounded-lg p-4">
-                <h4 className="text-sm font-semibold text-brand-300 mb-2">Ringkasan Proses:</h4>
-                <div className="text-xs text-slate-400 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold">1</span>
-                    <span>Klik kanan → Inspect → Application → Cookies</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold">2</span>
-                    <span>Gunakan filter untuk mencari nama cookie</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold">3</span>
-                    <span>Copy value cookie dari aplikasi ini</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold">4</span>
-                    <span>Paste ke aplikasi tujuan di bagian Value/Nilai</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold">5</span>
-                    <span>Selesaikan seluruhnya → Tutup console → Refresh</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+    {/* Tips jika tidak berhasil */}
+    <div className="bg-yellow-900/20 border border-yellow-700 rounded-lg p-4">
+      <p className="text-sm font-semibold text-yellow-200 mb-2">⚠️ Kalau Masih Belum Berhasil:</p>
+      <ul className="list-disc list-inside space-y-1 text-sm text-yellow-300">
+        <li>Coba hapus cache browser dulu, lalu refresh lagi</li>
+        <li>Periksa lagi apakah semua cookie sudah benar di-paste</li>
+        <li>Pastikan Anda paste cookie di website yang benar</li>
+      </ul>
+    </div>
+
+    {/* Peringatan waktu */}
+    <div className="bg-red-900/20 border border-red-800 rounded-lg p-4">
+      <p className="text-sm text-red-300">
+        <strong className="text-red-200">⏰ Penting!</strong> Cookie di aplikasi ini akan otomatis hilang setelah 1 jam. Jadi selesaikan prosesnya sebelum waktu habis.
+      </p>
+    </div>
+
+    {/* Ringkasan visual */}
+    <div className="bg-dark-900 border border-slate-700 rounded-lg p-4">
+      <h4 className="text-sm font-semibold text-brand-300 mb-3">Ringkasan Singkat:</h4>
+      <div className="text-sm text-slate-300 space-y-2">
+        <div className="flex items-start gap-2">
+          <span className="text-brand-400 mt-1">✓</span>
+          <span>Buka menu Inspect → Cari bagian Cookies</span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-brand-400 mt-1">✓</span>
+          <span>Copy nilai cookie dari sini</span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-brand-400 mt-1">✓</span>
+          <span>Paste ke website tujuan</span>
+        </div>
+        <div className="flex items-start gap-2">
+          <span className="text-brand-400 mt-1">✓</span>
+          <span>Tutup Inspect → Refresh halaman → Selesai!</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+)}
         </div>
 
         {/* Footer */}
